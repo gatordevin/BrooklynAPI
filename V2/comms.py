@@ -1,10 +1,20 @@
 from threading import Thread 
 from time import sleep, monotonic
 import serial
+import atexit
 
 class Comm:
     def __init__(self, port='/dev/ttyACM0'):
         self.ser = serial.Serial(port=port,baudrate=1000000,timeout=None)
+        self.ser.write(bytearray([140]))
+        self.ser.flush()
+        atexit.register(self.end)
+        
+    def end(self):
+        print("Returning Brooklyn to idle mode")
+        self.ser.write(bytearray([170]))
+        self.ser.close()
+        print("Programmed ended gracefully.")
 
     def write(self,cid,cmd,packet_data):
         packet = [255]
