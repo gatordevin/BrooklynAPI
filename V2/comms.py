@@ -7,6 +7,7 @@ class Comm:
     def __init__(self, port='/dev/ttyACM0'):
         self.ser = serial.Serial(port=port,baudrate=1000000,timeout=None)
         self.ser.write(bytearray([140]))
+        self.ser.read(1)
         self.ser.flush()
         atexit.register(self.end)
         
