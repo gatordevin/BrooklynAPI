@@ -1,3 +1,4 @@
+from BrooklynAPI import utils
 class Empire:
     def __init__(self, brook, cid):
         self.brook = brook
@@ -6,9 +7,9 @@ class Empire:
         self.cids = [cid+1, cid+2]
 
     def motor(self, mid):
-        if mid is 1:
+        if mid == 1:
             motor = Motor(self.cids[0], self.brook)
-        elif mid is 2:
+        elif mid == 2:
             motor = Motor(self.cids[1], self.brook)
         else:
             print("invalid motor")
@@ -16,13 +17,13 @@ class Empire:
         return motor
         
     def servo(self, sid):
-        if sid is 1:
+        if sid == 1:
             servo = Servo(self.cids[0], 1, self.brook)
-        elif sid is 2:
+        if sid == 2:
             servo = Servo(self.cids[1], 1, self.brook)
-        elif sid is 3:
+        if sid == 3:
             servo = Servo(self.cids[0], 0, self.brook)
-        elif sid is 4:
+        if sid == 4:
             servo = Servo(self.cids[1], 0, self.brook)
         else:
             print("invalid servo")
@@ -54,8 +55,18 @@ class Servo:
         self.cid = cid
         self.sid = sid
         self.brook = brook
-        resp = self.brook.write(self.cid, 9, [self.sid, 0])
+        self.set_angle_range(0,180,900,2100)
+        #self.set_angle(0)
 
     def set_angle(self, angle):
         resp = self.brook.write(self.cid, 9, [self.sid, angle])
+        print(resp)
+
+    def set_angle_range(self, min_angle, max_angle, min_microseconds, max_microseconds):
+        data = [self.sid]
+        data.extend(utils.decTo256(min_angle))
+        data.extend(utils.decTo256(max_angle))
+        data.extend(utils.decTo256(min_microseconds))
+        data.extend(utils.decTo256(max_microseconds))
+        resp = self.brook.write(self.cid, 11,data)
         print(resp)
