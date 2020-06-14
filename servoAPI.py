@@ -52,7 +52,7 @@ class Servo:
         for i in xrange(9):
             data.append(ord(su.readBytes(self.ser, 1)[0]))
         print("Recieved: ")
-        print data
+        print(data)
         return True
 
     # Set Speed for continuous servo

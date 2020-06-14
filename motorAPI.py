@@ -74,7 +74,7 @@ class Motor:
         for i in xrange(9):
             data.append(ord(su.readBytes(self.ser, 1)[0]))
         print("Recieved: ")
-        print data
+        print(data)
         return True
 
     # Sets ppr for the motor

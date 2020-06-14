@@ -1,7 +1,7 @@
 import brooklyn as brd
 import time
 
-test = brd.Brooklyn("COM6")
+test = brd.Brooklyn("COM4")
 test.setcard(1, brd.EMPIRE_STATE)
 test.setcard(2, brd.EMPIRE_STATE)
 test.setcard(3, brd.EMPIRE_STATE)
