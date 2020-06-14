@@ -72,8 +72,6 @@ class Servo:
         print(resp)
 
 class ServoType:
-    #servo-xyz = [values found]
-    #ServoType.servo-xyz to use values found
     def __init__(self, cid, sid, brook):
         self.cid = cid
         self.sid = sid
