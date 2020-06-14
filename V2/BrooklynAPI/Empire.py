@@ -55,7 +55,7 @@ class Servo:
         self.cid = cid
         self.sid = sid
         self.brook = brook
-        self.set_angle_range(0,180,553,2450)
+        self.set_angle_range(ServoType.dual_mode_servo[0], ServoType.dual_mode_servo[1], ServoType.dual_mode_servo[2], ServoType.dual_mode_servo[3])
         #self.set_angle(0)
 
     def set_angle(self, angle):
@@ -68,5 +68,18 @@ class Servo:
         data.extend(utils.decTo256(max_angle))
         data.extend(utils.decTo256(min_microseconds))
         data.extend(utils.decTo256(max_microseconds))
-        resp = self.brook.write(self.cid, 11,data)
+        resp = self.brook.write(self.cid, 11, data)
         print(resp)
+
+class ServoType:
+    #servo-xyz = [values found]
+    #ServoType.servo-xyz to use values found
+    def __init__(self, cid, sid, brook):
+        self.cid = cid
+        self.sid = sid
+        self.brook = brook
+
+    HS785HB = [0, 2826, 600, 2400]
+    HS322HD = [0, 201, 553, 2450]
+    DF9GMS = [0, 180, 1000, 2000]
+    dual_mode_servo = [0, 300, 500, 2500]
