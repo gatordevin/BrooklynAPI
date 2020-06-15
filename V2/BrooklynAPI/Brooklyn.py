@@ -6,23 +6,44 @@ from BrooklynAPI.Empire import Empire as empire_card
 import serial.tools.list_ports
 import sys
 class Brooklyn:
-    def __init__(self, port=None): #COM port will now be autoamtically found first avaiable arduino plugged in will be connected to if None is passed in
+    def __init__(self, port=None, name=None): #COM port will now be autoamtically found first avaiable arduino plugged in will be connected to if None is passed in
         self.port = port
+        self.ser = None
         if(port == None):
             ports = list(serial.tools.list_ports.comports(True))
             for p in ports:
                 if("Arduino" in p.description):
                     self.port = p.device
-                    break
+                    if(name != None):
+                        self.ser = serial.Serial(port=self.port,baudrate=1000000,timeout=None)
+                        self.ser.write(bytearray([140]))
+                        self.ser.flush()
+                        self.ser.read(1)
+                        resp  = self.write(1,2,[])
+                        board_name = "".join(map(chr, resp[4:-2]))
+                        if board_name == name:
+                            break
+                        else:
+                            self.ser.write(bytearray([170]))
+                            self.ser.close()
+                            self.ser = None
+                    else:
+                        break
+            if(name != None):
+                if(self.ser == None):
+                    print("No Brooklyn with name", name, "found")
+                    sys.exit(0)
         if self.port is not None:
-            self.ser = serial.Serial(port=self.port,baudrate=1000000,timeout=None)
+            if(self.ser == None):
+                self.ser = serial.Serial(port=self.port,baudrate=1000000,timeout=None)
+                self.ser.write(bytearray([140]))
+                self.ser.flush()
+                self.ser.read(1)
         else:
             print("No Brooklyn Found")
             sys.exit(0)
+        
         self.cards = [None,None,None,None]
-        self.ser.write(bytearray([140]))
-        self.ser.flush()
-        self.ser.read(1)
         atexit.register(self.end)
         
     def end(self):
@@ -38,6 +59,17 @@ class Brooklyn:
         card = card_type(self, cid)
         self.cards[cid-1] = card
         return card
+
+    def set_name(self, name):
+        buff = []
+        for c in name:
+            buff.append(ord(c))
+        resp = self.write(1,1,buff)
+
+    def get_name(self):
+        resp  = self.write(1,2,[])
+        board_name = "".join(map(chr, resp[4:-2]))
+        return board_name
     
     def write(self,cid,cmd,packet_data):
         packet = [255]
