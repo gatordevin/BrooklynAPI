@@ -7,10 +7,9 @@ class Empire:
         self.cids = [cid+1, cid+2]
 
     def motor(self, mid):
-        if mid == 1:
+        if mid == 0:
             motor = Motor(self.cids[0], self.brook)
-        elif mid == 2:
-            motor = Motor(self.cids[1], self.brook)
+        
         else:
             print("invalid motor")
         self.motors.append(self.motors)
@@ -35,18 +34,26 @@ class Motor:
         self.cid = cid
         self.brook = brook
 
-    def set_power(self, power):
-        if(power > 1): power = 1
-        if(power < -1): power = -1
+    def set_power(self, direction, power):
 
-        if(power == 0):
-            direction = 0
-        elif(power > 0):
-            direction = 1
-        elif(power < 0):
-            direction = 2
+        resp = self.brook.write(self.cid, 25, [direction,abs(power)])
+        print(utils.interpret2(resp))
 
-        resp = self.brook.write(self.cid, 25, [direction,255*abs(power)])
+
+    def read_encoder(self):
+        resp = self.brook.write(self.cid, 24,[])
+        print(utils.interpret2(resp))
+
+    def set_pid_angle(self, setpoint):
+
+        resp = self.brook.write(self.cid, 26,[setpoint])
+        print(resp)
+
+    def set_pid_constants(self, Kp, Ki, Kd):
+        data = utils.double_to_data(Kp)
+        data.extend(utils.double_to_data(Ki))
+        data.extend(utils.double_to_data(Kd))
+        resp = self.brook.write(self.cid, 29,data)
         print(resp)
 
 
@@ -63,6 +70,7 @@ class Servo:
         data = [self.sid]
         data.extend(utils.decTo256(angle)) #Set angle can now send values greater than 255 to the empire board to supprot wider range servos
         resp = self.brook.write(self.cid, 9, data)
+        print(resp)
 
     def set_angle_range(self, min_angle, max_angle, min_microseconds, max_microseconds):
         data = [self.sid]
