@@ -45,14 +45,15 @@ class Motor:
         print(utils.interpret2(resp))
 
     def set_pid_angle(self, setpoint):
+        data = utils.decTo256(setpoint)
+        resp = self.brook.write(self.cid, 26,data)
+        print(utils.interpret2(resp))
 
-        resp = self.brook.write(self.cid, 26,[setpoint])
-        print(resp)
-
-    def set_pid_constants(self, Kp, Ki, Kd):
+    def set_pid_constants(self, Kp, Ki, Kd, Kz):
         data = utils.double_to_data(Kp)
         data.extend(utils.double_to_data(Ki))
         data.extend(utils.double_to_data(Kd))
+        data.append(Kz)
         resp = self.brook.write(self.cid, 29,data)
         print(resp)
 
