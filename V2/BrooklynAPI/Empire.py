@@ -71,7 +71,6 @@ class Servo:
         data = [self.sid]
         data.extend(utils.decTo256(angle)) #Set angle can now send values greater than 255 to the empire board to supprot wider range servos
         resp = self.brook.write(self.cid, 9, data)
-        print(resp)
 
     def set_angle_range(self, min_angle, max_angle, min_microseconds, max_microseconds):
         data = [self.sid]
@@ -82,7 +81,7 @@ class Servo:
         resp = self.brook.write(self.cid, 11, data)
 
 class ServoType:
-    HS785HB = [0, 2826, 600, 2400]
+    HS785HB = [0, 2826, 500, 2400]
     HS322HD = [0, 201, 553, 2450]
     DF9GMS = [0, 180, 1000, 2000]
     dual_mode_servo = [0, 300, 500, 2500]
