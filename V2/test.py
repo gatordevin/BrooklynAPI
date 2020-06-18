@@ -15,8 +15,8 @@ servo = card1.servo(1)
 while True:
     start = monotonic()
     #motor.set_power(2,50)
-    #motor.set_pid_angle(20000)
-    brook.write(2,4,[])
+    motor.set_pid_angle(2000)
+    
     sleep(0.02)
     end = monotonic()
     #print()
