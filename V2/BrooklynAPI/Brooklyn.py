@@ -81,13 +81,13 @@ class Brooklyn:
         packet_sum = sum(packet)
         packet.append(packet_sum // 256)
         packet.append(packet_sum % 256)
-        #print("sent:", packet)
+        print("sent:", packet)
         byte_send_packet = bytearray(packet)
         self.ser.write(byte_send_packet)
         self.ser.flush()
         resp = list(self.ser.read(4))
         resp.extend(list(self.ser.read(resp[3]+2)))
-        #print("recv:", resp, "\n")
+        print("recv:", resp, "\n")
         return resp
 
 
