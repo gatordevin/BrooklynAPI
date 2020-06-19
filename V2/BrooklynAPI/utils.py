@@ -1,9 +1,17 @@
 import math
 
+def negitiveCheck(num):
+    if(abs(num) == num):
+        return 1
+    else:
+        return 0
+
 def decTo256(num):
     output = []
-    output.append(num%255)
-    output.append(num//255)
+    temp = abs(num)
+    output.append(temp%255)
+    output.append(temp//255)
+    output.append(negitiveCheck(num))
     return output
 
 def interpret2(packet):
@@ -52,10 +60,10 @@ def swerve_speed_calcuator(throttleRaw, strafeRaw, rotateRaw):
             RFS = RFS/maxVal
             RBS = RBS/maxVal
         
-        wheelSpeeds[0] = LFS
-        wheelSpeeds[1] = LBS
-        wheelSpeeds[2] = RFS
-        wheelSpeeds[3] = RBS
+        wheelSpeeds[0] = LFS*255
+        wheelSpeeds[1] = LBS*255
+        wheelSpeeds[2] = RFS*255
+        wheelSpeeds[3] = RBS*255
         
         return wheelSpeeds
 
