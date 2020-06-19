@@ -91,6 +91,7 @@ class Brooklyn:
         return resp
 
 
+
 class CardType:
     Empire = empire_card
     ids = [Empire]
