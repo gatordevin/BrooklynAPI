@@ -6,9 +6,9 @@ class Empire:
         self.servos = []
         self.cids = [cid+1, cid+2]
 
-    def motor(self, mid):
+    def motor(self, mid, motor_type=None):
         if mid == 0:
-            motor = Motor(self.cids[0], self.brook)
+            motor = Motor(self.cids[0], self.brook, motor_type)
         
         else:
             print("invalid motor")
@@ -30,15 +30,16 @@ class Empire:
         return servo
 
 class Motor:
-    def __init__(self, cid, brook):
+    def __init__(self, cid, brook, motor_type):
         self.cid = cid
         self.brook = brook
+        if(self.motor_type != None):
+            self.set_pid_constants(motor_type["kP"], motor_type["kI"], motor_type["kD"], motor_type["kZ"])
 
     def set_power(self, direction, power):
 
         resp = self.brook.write(self.cid, 25, [direction,abs(power)])
         print(utils.interpret2(resp))
-
 
     def read_encoder(self):
         resp = self.brook.write(self.cid, 24,[])
@@ -62,6 +63,18 @@ class Motor:
         resp = self.brook.write(self.cid, 30, [])
         print(resp)
 
+class MotorType:
+    rpm30 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
+    rpm43 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
+    rpm60 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
+    rpm84 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 1428}
+    rpm117 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
+    rpm223 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
+    rpm312 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
+    rpm435 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
+    rpm1150 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
+    rpm1620 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
+    
 
 class Servo:
     def __init__(self, cid, sid, brook, servo_type): #Servo class now takes servo type as a paramter as well to allow for init servo settings
@@ -90,3 +103,4 @@ class ServoType:
     HS322HD = [0, 201, 553, 2450]
     DF9GMS = [0, 180, 1000, 2000]
     dual_mode_servo = [0, 300, 500, 2500]
+
