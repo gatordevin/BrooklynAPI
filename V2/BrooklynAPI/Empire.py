@@ -19,11 +19,11 @@ class Empire:
     def servo(self, sid, servo_type=None): #Now accepts servo type as a paramter and defaults to None so user doesnt need to pass in a type
         if sid is 1:
             servo = Servo(self.cids[0], 1, self.brook, servo_type)
-        elif sid is 2:
+        elif sid == 2:
             servo = Servo(self.cids[1], 1, self.brook, servo_type)
-        elif sid is 3:
+        elif sid == 3:
             servo = Servo(self.cids[0], 0, self.brook, servo_type)
-        elif sid is 4:
+        elif sid == 4:
             servo = Servo(self.cids[1], 0, self.brook, servo_type)
         else:
             print("invalid servo")
@@ -49,6 +49,15 @@ class Motor:
         resp = self.brook.write(self.cid, 25, [direction,255*abs(power)])
         print(resp)
 
+    def read_speed(self):
+        resp = self.brook.write(self.cid, 27, [])
+        print(utils.interpret(resp))
+
+    def set_pid_speed(self, speed):
+        data = utils.decTo256(speed)
+        resp = self.brook.write(self.cid, 28, data)
+        print(utils.interpret(resp))
+
 
 class Servo:
     def __init__(self, cid, sid, brook, servo_type): #Servo class now takes servo type as a paramter as well to allow for init servo settings
@@ -73,7 +82,10 @@ class Servo:
         resp = self.brook.write(self.cid, 11, data)
 
 class ServoType:
-    HS785HB = [0, 2826, 600, 2400]
+    HS785HB = [0, 2826, 500, 2400]
     HS322HD = [0, 201, 553, 2450]
     DF9GMS = [0, 180, 1000, 2000]
     dual_mode_servo = [0, 300, 500, 2500]
+    dual_mode_servo_continuous = [0, 360, 1000, 2000]
+    HS755MG = [0, 200, 570, 2400]
+    HS5086WP = [0, 90, 1100, 1900]
