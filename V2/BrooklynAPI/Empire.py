@@ -48,13 +48,18 @@ class Motor:
         data = utils.decTo256(setpoint)
         resp = self.brook.write(self.cid, 26,data)
         print(utils.interpret2(resp))
-
+        #print(resp)
     def set_pid_constants(self, Kp, Ki, Kd, Kz):
         data = utils.double_to_data(Kp)
         data.extend(utils.double_to_data(Ki))
         data.extend(utils.double_to_data(Kd))
         data.append(Kz)
         resp = self.brook.write(self.cid, 29,data)
+        print(resp)
+    
+    def zero_encoder(self):
+        
+        resp = self.brook.write(self.cid, 30, [])
         print(resp)
 
 

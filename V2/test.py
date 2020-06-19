@@ -8,16 +8,16 @@ brook.set_name("DevinsBrook") #You can now set a custom name to your brooklyn to
 print(brook.get_name()) #You an also query the name
 card1 = brook.card(1) #No longer need to specify a card type it will be queried automaticially
 motor = card1.motor(0)
-
-0
+motor.zero_encoder()
+motor.set_pid_constants(0.081,0.0003,0.008, 160)
 while True:
     start = monotonic()
-    #motor.set_power(2,50)
+    #motor.set_power(1,50)
     motor.set_pid_angle(2000)
     
     sleep(0.02)
     end = monotonic()
-    #print()
+    
 
 
 
