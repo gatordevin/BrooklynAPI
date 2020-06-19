@@ -6,11 +6,10 @@ class Empire:
         self.servos = []
         self.cids = [cid+1, cid+2]
 
-    def motor(self, mid):
-        if mid == 1:
-            motor = Motor(self.cids[0], self.brook)
-        elif mid == 2:
-            motor = Motor(self.cids[1], self.brook)
+    def motor(self, mid, motor_type=None):
+        if mid == 0:
+            motor = Motor(self.cids[0], self.brook, motor_type)
+        
         else:
             print("invalid motor")
         self.motors.append(self.motors)
@@ -31,22 +30,37 @@ class Empire:
         return servo
 
 class Motor:
-    def __init__(self, cid, brook):
+    def __init__(self, cid, brook, motor_type):
         self.cid = cid
         self.brook = brook
+        if(self.motor_type != None):
+            self.set_pid_constants(motor_type["kP"], motor_type["kI"], motor_type["kD"], motor_type["kZ"])
 
-    def set_power(self, power):
-        if(power > 1): power = 1
-        if(power < -1): power = -1
+    def set_power(self, direction, power):
 
-        if(power == 0):
-            direction = 0
-        elif(power > 0):
-            direction = 1
-        elif(power < 0):
-            direction = 2
+        resp = self.brook.write(self.cid, 25, [direction,abs(power)])
+        print(utils.interpret2(resp))
 
-        resp = self.brook.write(self.cid, 25, [direction,255*abs(power)])
+    def read_encoder(self):
+        resp = self.brook.write(self.cid, 24,[])
+        print(utils.interpret2(resp))
+
+    def set_pid_angle(self, setpoint):
+        data = utils.decTo256(setpoint)
+        resp = self.brook.write(self.cid, 26,data)
+        print(utils.interpret2(resp))
+        #print(resp)
+    def set_pid_constants(self, Kp, Ki, Kd, Kz):
+        data = utils.double_to_data(Kp)
+        data.extend(utils.double_to_data(Ki))
+        data.extend(utils.double_to_data(Kd))
+        data.append(Kz)
+        resp = self.brook.write(self.cid, 29,data)
+        print(resp)
+    
+    def zero_encoder(self):
+        
+        resp = self.brook.write(self.cid, 30, [])
         print(resp)
 
     def read_speed(self):
@@ -58,6 +72,18 @@ class Motor:
         resp = self.brook.write(self.cid, 28, data)
         print(utils.interpret(resp))
 
+class MotorType:
+    rpm30 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
+    rpm43 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
+    rpm60 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
+    rpm84 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 1428}
+    rpm117 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
+    rpm223 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
+    rpm312 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
+    rpm435 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
+    rpm1150 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
+    rpm1620 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
+    
 
 class Servo:
     def __init__(self, cid, sid, brook, servo_type): #Servo class now takes servo type as a paramter as well to allow for init servo settings
