@@ -14,7 +14,7 @@ while True:
     start = monotonic()
     #motor.set_power(1,50)
     #motor.read_encoder()
-    motor.set_pid_angle(-2000)
+    #motor.set_pid_angle(-2000)
 
     sleep(0.02)
     end = monotonic()

@@ -20,7 +20,7 @@ class Empire:
             servo = Servo(self.cids[0], 1, self.brook, servo_type)
         elif sid is 2:
             servo = Servo(self.cids[1], 1, self.brook, servo_type)
-        elif sid is 3:
+        elif sid is 3: 
             servo = Servo(self.cids[0], 0, self.brook, servo_type)
         elif sid is 4:
             servo = Servo(self.cids[1], 0, self.brook, servo_type)
@@ -46,7 +46,7 @@ class Motor:
         print(utils.interpret2(resp))
 
     def set_pid_angle(self, setpoint):
-        data = utils.decTo256(setpoint)
+        data = utils.decTo256(int(setpoint)))
         resp = self.brook.write(self.cid, 26,data)
         print(utils.interpret2(resp))
         #print(resp)
@@ -62,14 +62,20 @@ class Motor:
         
         resp = self.brook.write(self.cid, 30, [])
         print(resp)
+    
+    def home(self, direction, speed):
+        self.set_power(direction,speed)
+        velocity = self.read_speed()
+        if(speed)
+
 
 class MotorType:
-    rpm30 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
+    rpm30 = {"kP": 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" = 0}
     rpm43 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
     rpm60 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
     rpm84 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 1428}
     rpm117 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
-    rpm223 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
+    rpm223 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 750}
     rpm312 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
     rpm435 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
     rpm1150 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
