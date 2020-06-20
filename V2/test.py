@@ -16,7 +16,7 @@ motor = card1.motor(0, MotorType.rpm84)
 motor.home(2,50)
 while True:
     start = monotonic()
-    motor.read_speed()
+    #motor.read_speed()
     #motor.read_encoder()
     #motor.set_pid_angle(-2000)
     #motor.home(1,50)
