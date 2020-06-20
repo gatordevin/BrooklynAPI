@@ -1,6 +1,6 @@
 
 from BrooklynAPI.Brooklyn import Brooklyn, CardType
-from BrooklynAPI.Empire import ServoType #Import servotype class to make all types accesible from the main class
+from BrooklynAPI.Empire import ServoType, MotorType #Import servotype class to make all types accesible from the main class
 from time import sleep, monotonic
 
 brook = Brooklyn() #No longer need to pass in COM port Brooklyn will be automaticially found
