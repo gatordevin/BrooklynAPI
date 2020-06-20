@@ -9,7 +9,7 @@ class Empire:
 
     def motor(self, mid, motor_type=None):
         if mid == 0:
-            motor = Motor(self.cids[0], self.brook)
+            motor = Motor(self.cids[0], self.brook, motor_type)
         
         else:
             print("invalid motor")
@@ -48,7 +48,7 @@ class Motor:
         print(utils.interpret2(resp))
 
     def set_pid_angle(self, setpoint):
-        data = utils.decTo256(int(setpoint))
+        data = utils.decTo256(setpoint)
         resp = self.brook.write(self.cid, 26,data)
         print(utils.interpret2(resp))
         #print(resp)
@@ -69,16 +69,20 @@ class Motor:
         self.set_power(direction,speed)
         sleep(2)
         velocity = self.read_speed()
-        while(velocity != 0):
+        while True:
             velocity = self.read_speed()
+            if(abs(velocity) < 150):
+                break
+
         self.set_power(0,0)
         self.zero_encoder()
         
 
     def read_speed(self):
         resp = self.brook.write(self.cid, 27, [])
-        print(utils.interpret(resp))
-        return utils.interpret(resp)
+        sleep(0.2)
+        print(utils.interpret2(resp))
+        return utils.interpret2(resp)
 
     def set_pid_speed(self, speed):
         data = utils.decTo256(speed)
@@ -89,7 +93,7 @@ class MotorType:
     rpm30 = {"kP": 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
     rpm43 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
     rpm60 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
-    rpm84 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 1428}
+    rpm84 = {"kP" : 0.11, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 1428}
     rpm117 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
     rpm223 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 750}
     rpm312 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}

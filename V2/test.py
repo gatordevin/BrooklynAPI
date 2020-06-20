@@ -12,14 +12,19 @@ motor = card1.motor(0, MotorType.rpm84)
 #servo2 = card1.servo(2, ServoType.DF9GMS)
 #servo3 = card1.servo(3, ServoType.HS322HD)
 #servo4 = card1.servo(4, ServoType.dual_mode_servo)
-motor.set_power(2,100)
+#motor.set_pid_constants(0.11, 0.00, 0.00, 00)
+motor.zero_encoder()
 #motor.home(2,50)
+#motor.set_power(1, 50)
+motor.home(1,50)
 while True:
     start = monotonic()
-    #motor.read_speed()
+    
+    motor.read_speed()
+   
     #motor.read_encoder()
-    #motor.set_pid_angle(-2000)
-    #motor.home(1,50)
-    sleep(0.5)
+    #motor.set_pid_angle(2000)
+    
+    
     end = monotonic()
     #print(end-start)
