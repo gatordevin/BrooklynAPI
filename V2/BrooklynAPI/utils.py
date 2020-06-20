@@ -29,7 +29,7 @@ def interpret(packet):
     return encoder_pos
 
 def double_to_data(num):
-    num2 = num*10000 
+    num2 = num*1000 
     num3 = int(num2)
     data = decTo256(num3)
     return data
