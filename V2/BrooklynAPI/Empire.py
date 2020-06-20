@@ -1,4 +1,5 @@
 from BrooklynAPI import utils
+from time import sleep
 class Empire:
     def __init__(self, brook, cid):
         self.brook = brook
@@ -8,7 +9,7 @@ class Empire:
 
     def motor(self, mid, motor_type=None):
         if mid == 0:
-            motor = Motor(self.cids[0], self.brook, motor_type)
+            motor = Motor(self.cids[0], self.brook)
         
         else:
             print("invalid motor")
@@ -33,20 +34,21 @@ class Motor:
     def __init__(self, cid, brook, motor_type):
         self.cid = cid
         self.brook = brook
+        self.motor_type = motor_type
         if(self.motor_type != None):
             self.set_pid_constants(motor_type["kP"], motor_type["kI"], motor_type["kD"], motor_type["kZ"])
 
     def set_power(self, direction, power):
 
         resp = self.brook.write(self.cid, 25, [direction,abs(power)])
-        print(utils.interpret2(resp))
+        #print(utils.interpret2(resp))
 
     def read_encoder(self):
         resp = self.brook.write(self.cid, 24,[])
         print(utils.interpret2(resp))
 
     def set_pid_angle(self, setpoint):
-        data = utils.decTo256(int(setpoint)))
+        data = utils.decTo256(int(setpoint))
         resp = self.brook.write(self.cid, 26,data)
         print(utils.interpret2(resp))
         #print(resp)
@@ -61,17 +63,22 @@ class Motor:
     def zero_encoder(self):
         
         resp = self.brook.write(self.cid, 30, [])
-        print(resp)
+        #print(resp)
     
     def home(self, direction, speed):
         self.set_power(direction,speed)
+        sleep(2)
         velocity = self.read_speed()
-        if(speed)
-
+        while(velocity != 0):
+            velocity = self.read_speed()
+        self.set_power(0,0)
+        self.zero_encoder()
+        
 
     def read_speed(self):
         resp = self.brook.write(self.cid, 27, [])
         print(utils.interpret(resp))
+        return utils.interpret(resp)
 
     def set_pid_speed(self, speed):
         data = utils.decTo256(speed)
@@ -79,16 +86,16 @@ class Motor:
         print(utils.interpret(resp))
 
 class MotorType:
-    rpm30 = {"kP": 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" = 0}
-    rpm43 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
-    rpm60 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
-    rpm84 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 1428}
-    rpm117 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
-    rpm223 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 750}
-    rpm312 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
-    rpm435 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
-    rpm1150 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
-    rpm1620 = {"kP" = 0, "kI" = 0, "kD" = 0, "kZ" = 0, "cpr" = 0}
+    rpm30 = {"kP": 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
+    rpm43 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
+    rpm60 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
+    rpm84 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 1428}
+    rpm117 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
+    rpm223 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 750}
+    rpm312 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
+    rpm435 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
+    rpm1150 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
+    rpm1620 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
     
 
 class Servo:
