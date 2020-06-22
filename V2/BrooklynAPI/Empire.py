@@ -79,7 +79,7 @@ class Motor:
         #print(resp)
     
     def home(self, direction, speed):
-        self.set_power(direction,speed)
+        self.set_power(speed)
         sleep(2)
         velocity = self.read_speed()
         while True:
@@ -88,7 +88,7 @@ class Motor:
             if(abs(velocity) < 150):
                 break
 
-        self.set_power(0,0)
+        self.set_power(0)
         self.zero_encoder()
         
 
