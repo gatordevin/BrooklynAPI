@@ -37,10 +37,22 @@ class Motor:
         self.motor_type = motor_type
         if(self.motor_type != None):
             self.set_pid_constants(motor_type["kP"], motor_type["kI"], motor_type["kD"], motor_type["kZ"])
+            self.set_tpr()
+        else:
+            self.set_pid_constants(0, 0, 0, 0)
 
-    def set_power(self, direction, power):
+    def set_tpr(self):
+        data = utils.decTo256(self.motor_type["tpr"])
+        resp = self.brook.write(self.cid, 23, data)
+        print(utils.interpret(resp))
 
-        resp = self.brook.write(self.cid, 25, [direction,abs(power)])
+    def set_power(self, power):
+        if(power == 0):
+            resp = self.brook.write(self.cid, 25, [0,0])
+        elif(abs(power) == power):
+            resp = self.brook.write(self.cid, 25, [1,abs(power)])
+        else:
+            resp = self.brook.write(self.cid, 25, [2,abs(power)])
         #print(utils.interpret2(resp))
 
     def read_encoder(self):
@@ -52,6 +64,7 @@ class Motor:
         resp = self.brook.write(self.cid, 26,data)
         print(utils.interpret2(resp))
         #print(resp)
+
     def set_pid_constants(self, Kp, Ki, Kd, Kz):
         data = utils.double_to_data(Kp)
         data.extend(utils.double_to_data(Ki))
@@ -66,15 +79,16 @@ class Motor:
         #print(resp)
     
     def home(self, direction, speed):
-        self.set_power(direction,speed)
+        self.set_power(speed)
         sleep(2)
         velocity = self.read_speed()
         while True:
             velocity = self.read_speed()
+            #self.read_encoder()
             if(abs(velocity) < 150):
                 break
 
-        self.set_power(0,0)
+        self.set_power(0)
         self.zero_encoder()
         
 
@@ -90,16 +104,16 @@ class Motor:
         print(utils.interpret(resp))
 
 class MotorType:
-    rpm30 = {"kP": 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
-    rpm43 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
-    rpm60 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
-    rpm84 = {"kP" : 0.11, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 1428}
-    rpm117 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
-    rpm223 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 750}
-    rpm312 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
-    rpm435 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
-    rpm1150 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
-    rpm1620 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
+    rpm30 = {"kP": 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
+    rpm43 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
+    rpm60 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
+    rpm84 = {"kP" : 0.11, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 1428}
+    rpm117 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
+    rpm223 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 750}
+    rpm312 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
+    rpm435 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
+    rpm1150 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
+    rpm1620 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
     
 
 class Servo:
