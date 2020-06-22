@@ -1,6 +1,16 @@
 import math
 
 class swerve:
+
+    def __init__(self, rotation_motor1, translation_motor1,rotation_motor2, translation_motor2,rotation_motor3, translation_motor3,rotation_motor4, translation_motor4):
+        self.rotation_motor1 = rotation_motor1
+        self.translation_motor1 = translation_motor1
+        self.rotation_motor2 = rotation_motor2
+        self.translation_motor2 = translation_motor2
+        self.rotation_motor3 = rotation_motor3
+        self.translation_motor3 = translation_motor3
+        self.rotation_motor4 = rotation_motor4
+        self.translation_motor4 = translation_motor4
     def swerve_speed_calcuator(self, throttleRaw, strafeRaw, rotateRaw):
         wheelSpeeds = []
         temp = throttleRaw*math.cos(0) + strafeRaw*math.sin(0)
@@ -53,10 +63,10 @@ class swerve:
             LFA = (math.atan2(A,D))*180/math.pi
             LBA = (math.atan2(A,C))*180/math.pi
 
-            wheelAngles[0] = int(RBA*3.9667*4.25)
-            wheelAngles[1] = int(RFA*3.9667*4.25)
-            wheelAngles[2] = int(LFA*3.9667*4.25)
-            wheelAngles[3] = int(LBA*3.9667*4.25)
+            wheelAngles[0] = int(RBA*3.9667)
+            wheelAngles[1] = int(RFA*3.9667)
+            wheelAngles[2] = int(LFA*3.9667)
+            wheelAngles[3] = int(LBA*3.9667)
 
             
             return wheelAngles
