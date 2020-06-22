@@ -8,22 +8,18 @@ brook.set_name("KatiesBrook") #You can now set a custom name to your brooklyn to
 print(brook.get_name()) #You an also query the name
 card1 = brook.card(1) #No longer need to specify a card type it will be queried automaticially
 motor = card1.motor(0, MotorType.rpm84)
-#servo1 = card1.servo(1, ServoType.HS785HB) # You can now pass in the servo type when creating a new servo
-#servo2 = card1.servo(2, ServoType.DF9GMS)
-#servo3 = card1.servo(3, ServoType.HS322HD)
-#servo4 = card1.servo(4, ServoType.dual_mode_servo)
-#motor.set_pid_constants(0.11, 0.00, 0.00, 00)
-motor.zero_encoder()
-#motor.home(2,50)
-#motor.set_power(1, 50)
-motor.home(1,50)
+
+
+#motor.zero_encoder()
+#motor.home(1,50)
+
 while True:
     start = monotonic()
+    #motor.read_speed()
+    #motor.set_power(0,0)
     
-    motor.read_speed()
-   
-    #motor.read_encoder()
-    #motor.set_pid_angle(2000)
+    resp = brook.write(2,4,[])
+    print(resp)
     
     
     end = monotonic()

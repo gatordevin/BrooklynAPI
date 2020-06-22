@@ -71,6 +71,7 @@ class Motor:
         velocity = self.read_speed()
         while True:
             velocity = self.read_speed()
+            #self.read_encoder()
             if(abs(velocity) < 150):
                 break
 
