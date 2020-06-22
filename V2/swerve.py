@@ -72,6 +72,11 @@ class swerve:
             return wheelAngles
     def run(self, throttle, strafe, rotation):
         wheel_angels = self.wheel_angel_calculations(throttle, strafe, rotation)
+        wheel_speeds = self.swerve_speed_calcuator(throttle, strafe, rotation)
+        self.translation_motor1.set_pid_angle(wheel_speeds[0])
+        self.translation_motor1.set_pid_angle(wheel_speeds[1])
+        self.translation_motor1.set_pid_angle(wheel_speeds[2])
+        self.translation_motor1.set_pid_angle(wheel_speeds[3])
 
     
 
