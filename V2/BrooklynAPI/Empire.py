@@ -37,6 +37,14 @@ class Motor:
         self.motor_type = motor_type
         if(self.motor_type != None):
             self.set_pid_constants(motor_type["kP"], motor_type["kI"], motor_type["kD"], motor_type["kZ"])
+            self.set_cpr()
+        else:
+            self.set_pid_constants(0, 0, 0, 0)
+
+    def set_cpr(self):
+        data = utils.decTo256(self.motor_type["cpr"])
+        resp = self.brook.write(self.cid, 23, data)
+        print(utils.interpret(resp))
 
     def set_power(self, direction, power):
 
@@ -52,6 +60,7 @@ class Motor:
         resp = self.brook.write(self.cid, 26,data)
         print(utils.interpret2(resp))
         #print(resp)
+
     def set_pid_constants(self, Kp, Ki, Kd, Kz):
         data = utils.double_to_data(Kp)
         data.extend(utils.double_to_data(Ki))
