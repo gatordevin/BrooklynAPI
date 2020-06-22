@@ -1,4 +1,4 @@
-from BrooklynAPI import utils
+import utils
 from time import sleep
 class Empire:
     def __init__(self, brook, cid):
