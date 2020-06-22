@@ -122,7 +122,11 @@ class Motor:
                 i = 0
             else:
                 i += 1
+    def breakMode(self):
+        self.set_pid_speed(0)
 
+    
+        
 class MotorType:
     rpm30 = {"kP": 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
     rpm43 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
