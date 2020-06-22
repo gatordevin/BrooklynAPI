@@ -37,12 +37,12 @@ class Motor:
         self.motor_type = motor_type
         if(self.motor_type != None):
             self.set_pid_constants(motor_type["kP"], motor_type["kI"], motor_type["kD"], motor_type["kZ"])
-            self.set_cpr()
+            self.set_tpr()
         else:
             self.set_pid_constants(0, 0, 0, 0)
 
-    def set_cpr(self):
-        data = utils.decTo256(self.motor_type["cpr"])
+    def set_tpr(self):
+        data = utils.decTo256(self.motor_type["tpr"])
         resp = self.brook.write(self.cid, 23, data)
         print(utils.interpret(resp))
 
@@ -99,16 +99,16 @@ class Motor:
         print(utils.interpret(resp))
 
 class MotorType:
-    rpm30 = {"kP": 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
-    rpm43 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
-    rpm60 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
-    rpm84 = {"kP" : 0.11, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 1428}
-    rpm117 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
-    rpm223 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 750}
-    rpm312 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
-    rpm435 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
-    rpm1150 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
-    rpm1620 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "cpr" : 0}
+    rpm30 = {"kP": 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
+    rpm43 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
+    rpm60 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
+    rpm84 = {"kP" : 0.11, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 1428}
+    rpm117 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
+    rpm223 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 750}
+    rpm312 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
+    rpm435 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
+    rpm1150 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
+    rpm1620 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
     
 
 class Servo:
