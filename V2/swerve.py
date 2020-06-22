@@ -70,8 +70,8 @@ class swerve:
 
             
             return wheelAngles
-    def swerve_run(self, throttle, strafe, rotation):
-        pass
+    def run(self, throttle, strafe, rotation):
+        wheel_angels = self.wheel_angel_calculations(throttle, strafe, rotation)
 
     
 
