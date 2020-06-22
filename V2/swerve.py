@@ -63,23 +63,13 @@ class swerve:
             LFA = (math.atan2(A,D))*180/math.pi
             LBA = (math.atan2(A,C))*180/math.pi
 
-            wheelAngles[0] = int(RBA*3.9667)
-            wheelAngles[1] = int(RFA*3.9667)
-            wheelAngles[2] = int(LFA*3.9667)
-            wheelAngles[3] = int(LBA*3.9667)
+            wheelAngles[0] = int((RBA+180)*4.25)
+            wheelAngles[1] = int((RFA+180)*4.25)
+            wheelAngles[2] = int((LFA+180)*4.25)
+            wheelAngles[3] = int((LBA+180)*4.25)
 
             
             return wheelAngles
-    def run(self, throttle, strafe, rotation):
-        wheel_angels = self.wheel_angel_calculations(throttle, strafe, rotation)
-        wheel_speeds = self.swerve_speed_calcuator(throttle, strafe, rotation)
-        self.translation_motor1.set_pid_angle(wheel_speeds[0])
-        self.translation_motor1.set_pid_angle(wheel_speeds[1])
-        self.translation_motor1.set_pid_angle(wheel_speeds[2])
-        self.translation_motor1.set_pid_angle(wheel_speeds[3])
-
-    
-
 
     def run_swerve(self, throttleRaw, strafeRaw, rotateRaw):
         speeds = self.swerve_speed_calcuator(throttleRaw, strafeRaw, rotateRaw)

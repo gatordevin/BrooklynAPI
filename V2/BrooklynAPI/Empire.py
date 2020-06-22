@@ -29,6 +29,8 @@ class Empire:
             print("invalid servo")
         self.servos.append(servo)
         return servo
+    def utrasonic_sensor(self): 
+        pass
 
 class Motor:
     def __init__(self, cid, brook, motor_type):
@@ -146,3 +148,6 @@ class ServoType:
     dual_mode_servo_continuous = [0, 360, 1000, 2000]
     HS755MG = [0, 200, 570, 2400]
     HS5086WP = [0, 90, 1100, 1900]
+
+class ultrasonic_sensor():
+    pass
