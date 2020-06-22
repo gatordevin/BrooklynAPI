@@ -70,6 +70,8 @@ class swerve:
 
             
             return wheelAngles
+    def swerve_run(self, throttle, strafe, rotation):
+        pass
 
     
 
