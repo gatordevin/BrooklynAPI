@@ -46,9 +46,13 @@ class Motor:
         resp = self.brook.write(self.cid, 23, data)
         print(utils.interpret(resp))
 
-    def set_power(self, direction, power):
-
-        resp = self.brook.write(self.cid, 25, [direction,abs(power)])
+    def set_power(self, power):
+        if(power == 0):
+            resp = self.brook.write(self.cid, 25, [0,0])
+        elif(abs(power) == power):
+            resp = self.brook.write(self.cid, 25, [1,abs(power)])
+        else:
+            resp = self.brook.write(self.cid, 25, [2,abs(power)])
         #print(utils.interpret2(resp))
 
     def read_encoder(self):
