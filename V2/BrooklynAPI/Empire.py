@@ -104,6 +104,24 @@ class Motor:
         data = utils.decTo256(speed)
         resp = self.brook.write(self.cid, 28, data)
         print(utils.interpret(resp))
+    
+    def follow(self, motor):
+        self.set_pid_speed(motor.read_speed())
+
+    def sync(self, motor):
+        self.follow(motor)
+        sleep(0.25)
+        speeds = []
+        i = 0
+        while True:        
+            speeds[i] = self.read_speed()
+            if(i==1):
+                if(abs(speeds[i] - speeds[i-1]) < 0.05 and abs(self.read_speed - motor.read_speed()) > 0.5):
+                    motor.follow(self)
+                    break
+                i = 0
+            else:
+                i += 1
 
 class MotorType:
     rpm30 = {"kP": 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
