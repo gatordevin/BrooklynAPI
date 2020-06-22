@@ -44,7 +44,7 @@ class swerve:
         
         return wheelSpeeds
 
-    def wheel_angel_calculations(self,throttleRaw, strafeRaw, rotateRaw):
+    def wheel_angle_calculations(self,throttleRaw, strafeRaw, rotateRaw):
             wheelAngles = []
             temp = throttleRaw*math.cos(0) + strafeRaw*math.sin(0)
             strafeRaw = -throttleRaw*math.sin(0) + strafeRaw*math.cos(0)
@@ -79,5 +79,19 @@ class swerve:
         self.translation_motor1.set_pid_angle(wheel_speeds[3])
 
     
+
+
+    def run_swerve(self, throttleRaw, strafeRaw, rotateRaw):
+        speeds = self.swerve_speed_calcuator(throttleRaw, strafeRaw, rotateRaw)
+        translation_motor1.setSpeed(speeds[0])
+        translation_motor2.setSpeed(speeds[1])
+        translation_motor3.setSpeed(speeds[2])
+        translation_motor4.setSpeed(speeds[3])
+        angles = self.wheel_angle_calculations(throttleRaw, strafeRaw, rotateRaw)
+        rotation_motor1.set_pid_angle(angles[0])
+        rotation_motor2.set_pid_angle(angles[1])
+        rotation_motor3.set_pid_angle(angles[2])
+        rotation_motor4.set_pid_angle(angles[3])
+
 
 
