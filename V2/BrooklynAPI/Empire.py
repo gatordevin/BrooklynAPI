@@ -122,6 +122,7 @@ class Motor:
                 i = 0
             else:
                 i += 1
+                
     def breakMode(self):
         self.set_pid_speed(0)
 
