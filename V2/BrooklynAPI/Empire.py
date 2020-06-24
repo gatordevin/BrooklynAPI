@@ -33,10 +33,14 @@ class Empire:
         pass
 
 class Motor:
-    def __init__(self, cid, brook, motor_type):
+    def __init__(self, cid, brook, motor_type, collision=False):
         self.cid = cid
         self.brook = brook
         self.motor_type = motor_type
+        self.limits = []
+        self.desired_speed = 0
+        self.collision = collision
+
         if(self.motor_type != None):
             self.set_pid_constants(motor_type["kP"], motor_type["kI"], motor_type["kD"], motor_type["kZ"])
             self.set_tpr()
@@ -55,6 +59,9 @@ class Motor:
             resp = self.brook.write(self.cid, 25, [1,abs(power)])
         else:
             resp = self.brook.write(self.cid, 25, [2,abs(power)])
+        self.desired_speed = power
+        if(self.collision):
+            self.collision_detect()
         #print(utils.interpret2(resp))
 
     def read_encoder(self):
@@ -104,6 +111,9 @@ class Motor:
         data = utils.decTo256(speed)
         resp = self.brook.write(self.cid, 28, data)
         print(utils.interpret(resp))
+        self.desired_speed = speed
+        if(self.collision):
+            self.collision_detect()
     
     def follow(self, motor):
         self.set_pid_speed(motor.read_speed())
@@ -123,10 +133,17 @@ class Motor:
             else:
                 i += 1
                 
-    def breakMode(self):
+    def brake_mode(self):
         self.set_pid_speed(0)
 
-    
+    def collision_detect(self):
+        if((abs(self.read_speed()) < 1) and (self.desired_speed != 0)):
+            self.brake_mode() 
+
+    def set_rot_limit(self, min, max):
+        self.limits = [min, max]
+        if(self.read_encoder < self.limits[0] or self.read_encoder > self.limits[1]):
+            self.brake_mode()
         
 class MotorType:
     rpm30 = {"kP": 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
