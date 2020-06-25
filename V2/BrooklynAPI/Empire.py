@@ -17,7 +17,7 @@ class Empire:
         return motor
         
     def servo(self, sid, servo_type=None): #Now accepts servo type as a paramter and defaults to None so user doesnt need to pass in a type
-        if sid is 1:
+        if sid == 1:
             servo = Servo(self.cids[0], 1, self.brook, servo_type)
         elif sid == 2:
             servo = Servo(self.cids[1], 1, self.brook, servo_type)
@@ -173,3 +173,12 @@ class ServoType:
 
 class ultrasonic_sensor():
     pass
+
+class ServoStuff: # idk
+
+    def interaction_phase(servo, input_manager):
+        for event in input_manager.get_events():
+            if event.key == 'up' and event.down:
+                servo.set_angle(180)
+            if event.key == 'down' and event.down:
+                servo.set_angle(0)
