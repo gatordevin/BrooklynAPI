@@ -42,7 +42,7 @@ class Motor:
         self.collision = collision
 
         #if(self.motor_type != None):
-        #   self.set_pid_constants(motor_type["kP"], motor_type["kI"], motor_type["kD"], motor_type["kZ"])
+        #    self.set_pid_constants(motor_type["kP"], motor_type["kI"], motor_type["kD"], motor_type["kZ"])
         #    self.set_tpr()
         #else:
         #    self.set_pid_constants(0, 0, 0, 0)
