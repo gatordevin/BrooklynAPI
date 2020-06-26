@@ -9,8 +9,9 @@ class Empire:
 
     def motor(self, mid, motor_type=None):
         if mid == 0:
+            motor = Motor(self.cids[0], self.brook, motor_type)    
+        elif mid == 1:
             motor = Motor(self.cids[0], self.brook, motor_type)
-        
         else:
             print("invalid motor")
         self.motors.append(self.motors)
