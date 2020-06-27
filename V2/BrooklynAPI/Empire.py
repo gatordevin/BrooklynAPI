@@ -59,15 +59,22 @@ class Motor:
             print("tpr was not set")
 
     def set_power(self, power):
-        if(power == 0):
-            resp = self.brook.write(self.cid, 25, [0,0])
-        elif(abs(power) == power):
-            resp = self.brook.write(self.cid, 25, [1,abs(power)])
-        else:
-            resp = self.brook.write(self.cid, 25, [2,abs(power)])
-        self.desired_speed = power
-        if(self.collision):
-            self.collision_detect()
+        try:
+            if(power == 0):
+                resp = self.brook.write(self.cid, 25, [0,0])
+            elif(abs(power) == power):
+                resp = self.brook.write(self.cid, 25, [1,abs(power)])
+            else:
+                resp = self.brook.write(self.cid, 25, [2,abs(power)])
+
+            if(resp[1] == 1):
+                self.desired_speed = power
+                if(self.collision):
+                    self.collision_detect()
+            else:
+                raise ChecksumError("Checksums did not match")
+        except ChecksumError:
+            print("power was not set")
         #print(utils.interpret2(resp))
 
     def read_encoder(self):
