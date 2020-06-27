@@ -49,8 +49,14 @@ class Motor:
 
     def set_tpr(self):
         data = utils.decTo256(self.motor_type["tpr"])
-        resp = self.brook.write(self.cid, 23, data)
-        print(utils.interpret(resp))
+        try:
+            resp = self.brook.write(self.cid, 23, data)
+            if(resp[1] == 1):
+                print(utils.interpret(resp))
+            else:
+                raise ChecksumError("Checksums did not match")
+        except ChecksumError:
+            print("tpr was not set")
 
     def set_power(self, power):
         if(power == 0):
@@ -201,3 +207,10 @@ class ServoStuff: # idk
                 servo.set_angle(180)
             if event.key == 'down' and event.down:
                 servo.set_angle(0)
+
+class Error(Exception):
+    pass
+
+class ChecksumError(Error):
+    def __init__(self, message):
+        self.message = message
