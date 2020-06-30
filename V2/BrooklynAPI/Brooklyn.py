@@ -49,6 +49,15 @@ class Brooklyn:
     def end(self):
         print("Returning Brooklyn to idle mode")
         self.write(2,25,[0,0])
+        self.write(3,25,[0,0])
+        self.write(4,25,[0,0])
+        self.write(5,25,[0,0])
+        self.write(6,25,[0,0])
+        self.write(7,25,[0,0])
+        self.write(8,25,[0,0])
+        self.write(9,25,[0,0])
+        self.write(10,25,[0,0])
+
         self.ser.write(bytearray([170]))
         self.ser.close()
         print("Programmed ended gracefully.")

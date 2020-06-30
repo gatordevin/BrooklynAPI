@@ -11,7 +11,7 @@ class Empire:
         if mid == 0:
             motor = Motor(self.cids[0], self.brook, motor_type)    
         elif mid == 1:
-            motor = Motor(self.cids[0], self.brook, motor_type)
+            motor = Motor(self.cids[1], self.brook, motor_type)
         else:
             print("invalid motor")
         self.motors.append(self.motors)
@@ -61,7 +61,9 @@ class Motor:
         else:
             resp = self.brook.write(self.cid, 25, [2,abs(power)])
         
+        #print(utils.interpret2(resp))
         print(resp)
+
 
     def read_encoder(self):
         resp = self.brook.write(self.cid, 24,[])
