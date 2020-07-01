@@ -58,7 +58,7 @@ class InputEvent:
             K_LEFT = 'left',
             K_RIGHT = 'right',
             K_RETURN = 'start',
-            K_a = 'A',
+e            K_a = 'A',
             K_b = 'B',
             K_x = 'X',
             K_y = 'Y',
