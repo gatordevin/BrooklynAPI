@@ -5,10 +5,13 @@ import atexit
 from BrooklynAPI.Empire import Empire as empire_card
 import serial.tools.list_ports
 import sys
+from BrooklynAPI import utils
+
 class Brooklyn:
     def __init__(self, port=None, name=None): #COM port will now be autoamtically found first avaiable arduino plugged in will be connected to if None is passed in
         self.port = port
         self.ser = None
+        self.packet_id = 0
         if(port == None):
             ports = list(serial.tools.list_ports.comports(True))
             for p in ports:
@@ -71,12 +74,25 @@ class Brooklyn:
         board_name = "".join(map(chr, resp[4:-2]))
         return board_name
     
+    def return_packet_id(self):
+        pack_id = self.packet_id
+        if(self.packet_id == 60000):
+            self.packet_id = 0
+        else:
+            self.packet_id += 1
+        return utils.decTo256(pack_id)
+
+    def heartbeat(self):
+        self.write(1,72,[])
+    
     def write(self,cid,cmd,packet_data):
         packet = [255]
         packet.append(cid)
+        packet.append(0)
         packet.append(cmd)
         packet.append(len(packet_data))
         packet.extend(packet_data)
+        packet.extend(self.return_packet_id())
         packet_sum = sum(packet)
         packet.append(packet_sum // 256)
         packet.append(packet_sum % 256)
@@ -84,8 +100,8 @@ class Brooklyn:
         byte_send_packet = bytearray(packet)
         self.ser.write(byte_send_packet)
         self.ser.flush()
-        resp = list(self.ser.read(4))
-        resp.extend(list(self.ser.read(resp[3]+2)))
+        resp = list(self.ser.read(5))
+        resp.extend(list(self.ser.read(resp[4]+4)))
         print("recv:", resp, "\n")
         return resp
 
