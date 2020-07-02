@@ -1,4 +1,4 @@
-from BrooklynAPI import utils
+import utils
 from time import sleep
 class Empire:
     def __init__(self, brook, cid):
@@ -9,7 +9,7 @@ class Empire:
 
     def motor(self, mid, motor_type=None):
         if mid == 0:
-            motor = Motor(self.cids[0], self.brook, motor_type)    
+            motor = Motor(self.cids[0], self.brook, motor_type)
         elif mid == 1:
             motor = Motor(self.cids[1], self.brook, motor_type)
         else:
@@ -42,11 +42,11 @@ class Motor:
         self.desired_speed = 0
         self.collision = collision
 
-        #if(self.motor_type != None):
-        #    self.set_pid_constants(motor_type["kP"], motor_type["kI"], motor_type["kD"], motor_type["kZ"])
-        #    self.set_tpr()
-        #else:
-        #    self.set_pid_constants(0, 0, 0, 0)
+        if(self.motor_type != None):
+            self.set_pid_constants(motor_type["kP"], motor_type["kI"], motor_type["kD"], motor_type["kZ"])
+            self.set_tpr()
+        else:
+            self.set_pid_constants(0, 0, 0, 0)
 
     def set_tpr(self):
         data = utils.decTo256(self.motor_type["tpr"])
@@ -60,10 +60,10 @@ class Motor:
             resp = self.brook.write(self.cid, 25, [1,abs(power)])
         else:
             resp = self.brook.write(self.cid, 25, [2,abs(power)])
-        
+        self.desired_speed = power
+        if(self.collision):
+            self.collision_detect()
         #print(utils.interpret2(resp))
-        print(resp)
-
 
     def read_encoder(self):
         resp = self.brook.write(self.cid, 24,[])
@@ -196,7 +196,7 @@ class ultrasonic_sensor():
 
 class ServoStuff: # idk
 
-    def interaction_phase(self, servo, input_manager):
+    def interaction_phase(self,servo, input_manager):
         for event in input_manager.get_events():
             if event.key == 'up' and event.down:
                 servo.set_angle(180)
