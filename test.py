@@ -1,24 +1,30 @@
-from time import sleep
-import brooklyn as brd
-import keyboard
-test = brd.Brooklyn("COM8")
-test.setcard(1, brd.EMPIRE_STATE)
-test.setcard(2, brd.EMPIRE_STATE)
-test.setcard(3, brd.EMPIRE_STATE)
-test.setcard(4, brd.EMPIRE_STATE)
 
-test.begin()
+from BrooklynAPI.Brooklyn import Brooklyn, CardType
+from BrooklynAPI.Empire import ServoType, MotorType #Import servotype class to make all types accesible from the main class
+from time import sleep, monotonic
 
-left = test.getservo(2, 1)
-right = test.getservo(2, 2)
+brook = Brooklyn() #No longer need to pass in COM port Brooklyn will be automaticially found
+brook.set_name("KatiesBrook") #You can now set a custom name to your brooklyn to distinguish it from others
+print(brook.get_name()) #You an also query the name
+card1 = brook.card(1) #No longer need to specify a card type it will be queried automaticially
+#motor = card1.motor(0, MotorType.rpm84)
+servo1 = card1.servo(1, ServoType.DF9GMS)
+
+
+#motor.zero_encoder()
+#motor.home(1,50)
+
 while True:
-    left.setangle(1000)
-    right.setangle(1000)
-    sleep(6)
-    left.setangle(2000)
-    right.setangle(2000)
-    sleep(6)
-#left.setangle(1600)
-#right.setangle(1600)
-test.end()
-
+    start = monotonic()
+    #motor.read_speed()
+    #motor.set_power(0,0)
+    
+    #resp = brook.write(2,4,[])
+    #print(resp)
+    servo1.set_angle(0)
+    sleep(2)
+    servo1.set_angle(180)
+    sleep(2)
+    
+    end = monotonic()
+    #print(end-start)

@@ -1,14 +1,13 @@
-'''
+
 import pygame
  
 class Joystick:
-    pygame.init()
-    pygame.joystick.init()
-    joystick = pygame.joystick.Joystick(0)
-    joystick.init()
     def __init__(self):
-        pass
-        
+
+        pygame.init()
+        pygame.joystick.init()
+        joystick = pygame.joystick.Joystick(0)
+        joystick.init()
  
  
     def get_number_of_joysticks(self):
@@ -48,9 +47,9 @@ class InputEvent:
         self.down = down
         self.up = not down
 
-class InputManager:
+ class InputManager:
 
-    def __init__(self):
+     def __init__(self):
         self.init_joystick()
         self.buttons = ['up', 'down', 'left', 'right', 'start', 'A', 'B', 'X', 'Y', 'L', 'R']
         self.key_map = {
@@ -59,7 +58,7 @@ class InputManager:
             K_LEFT = 'left',
             K_RIGHT = 'right',
             K_RETURN = 'start',
-            K_a = 'A',
+e            K_a = 'A',
             K_b = 'B',
             K_x = 'X',
             K_y = 'Y',
@@ -128,7 +127,7 @@ class InputManager:
             
 
  
-'''
+
 
 
     
