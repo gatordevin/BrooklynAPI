@@ -56,7 +56,7 @@ class Brooklyn:
         self.write(7,25,[0,0])
         self.write(8,25,[0,0])
         self.write(9,25,[0,0])
-        self.write(10,25,[0,0])
+       
 
         self.ser.write(bytearray([170]))
         self.ser.close()

@@ -54,6 +54,7 @@ class Motor:
         print(utils.interpret(resp))
 
     def set_power(self, power):
+        
         if(power == 0):
             resp = self.brook.write(self.cid, 25, [0,0])
         elif(abs(power) == power):
@@ -158,6 +159,7 @@ class MotorType:
     rpm435 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
     rpm1150 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
     rpm1620 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
+    rpm1to20 = {"kP" : 0.21, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
     
 
 class Servo:
