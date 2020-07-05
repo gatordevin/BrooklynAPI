@@ -51,14 +51,19 @@ class Brooklyn:
         
     def end(self):
         print("Returning Brooklyn to idle mode")
-        self.write(2,25,[0,0])
-        self.write(3,25,[0,0])
-        self.write(4,25,[0,0])
-        self.write(5,25,[0,0])
-        self.write(6,25,[0,0])
-        self.write(7,25,[0,0])
-        self.write(8,25,[0,0])
-        self.write(9,25,[0,0])
+        for card in self.cards:
+            if card != None:
+                for motor in card.motors:
+                    if motor != None:
+                        motor.set_power(0)
+        # self.write(2,25,[0,0])
+        # self.write(3,25,[0,0])
+        # self.write(4,25,[0,0])
+        # self.write(5,25,[0,0])
+        # self.write(6,25,[0,0])
+        # self.write(7,25,[0,0])
+        # self.write(8,25,[0,0])
+        # self.write(9,25,[0,0])
        
 
         self.ser.write(bytearray([170]))
@@ -90,29 +95,31 @@ class Brooklyn:
             self.packet_id = 0
         else:
             self.packet_id += 1
-        return utils.decTo256(pack_id)
+        return utils.decTo256noSign(pack_id)
 
     def heartbeat(self):
         self.write(1,72,[])
     
     def write(self,cid,cmd,packet_data):
         packet = [255]
-        packet.append(cid)
-        packet.append(0)
-        packet.append(cmd)
+        packet.append(cid) #byte 1
+        packet.append(0) #byte 2
+        packet.append(cmd) #byte
         packet.append(len(packet_data))
         packet.extend(packet_data)
         packet.extend(self.return_packet_id())
         packet_sum = sum(packet)
         packet.append(packet_sum // 256)
         packet.append(packet_sum % 256)
-        #print("sent:", packet)
+        print("sent:", packet)
         byte_send_packet = bytearray(packet)
         self.ser.write(byte_send_packet)
         self.ser.flush()
-        resp = list(self.ser.read(4))
-        resp.extend(list(self.ser.read(resp[3]+2)))
-        #print("recv:", resp, "\n")
+        
+        resp = list(self.ser.read(5))
+        # print(resp)
+        resp.extend(list(self.ser.read(resp[4]+4)))
+        print("recv:", resp, "\n")
         return resp
 
 

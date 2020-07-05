@@ -8,13 +8,14 @@ class Empire:
         self.cids = [cid+1, cid+2]
 
     def motor(self, mid, motor_type=None):
+        motor = None
         if mid == 0:
             motor = Motor(self.cids[0], self.brook, motor_type)    
         elif mid == 1:
             motor = Motor(self.cids[1], self.brook, motor_type)
         else:
             print("invalid motor")
-        self.motors.append(self.motors)
+        self.motors.append(motor)
         return motor
         
     def servo(self, sid, servo_type=None): #Now accepts servo type as a paramter and defaults to None so user doesnt need to pass in a type
@@ -42,22 +43,23 @@ class Motor:
         self.desired_speed = 0
         self.collision = collision
 
-        #if(self.motor_type != None):
-        #    self.set_pid_constants(motor_type["kP"], motor_type["kI"], motor_type["kD"], motor_type["kZ"])
-        #    self.set_tpr()
-        #else:
-        #    self.set_pid_constants(0, 0, 0, 0)
+        if(self.motor_type != None):
+           self.set_pid_constants(motor_type["kP"], motor_type["kI"], motor_type["kD"], motor_type["kZ"])
+           self.set_tpr()
+        else:
+           self.set_pid_constants(0, 0, 0, 0)
 
     def set_tpr(self):
         data = utils.decTo256(self.motor_type["tpr"])
-        try:
-            resp = self.brook.write(self.cid, 23, data)
-            if(resp[1] == 1):
-                print(utils.interpret(resp))
-            else:
-                raise ChecksumError("Checksums did not match")
-        except ChecksumError:
-            print("tpr was not set")
+        resp = self.brook.write(self.cid, 23, data)
+        # try:
+        #     resp = self.brook.write(self.cid, 23, data)
+        #     if(resp[1] == 1):
+        #         print(utils.interpret(resp))
+        #     else:
+        #         raise ChecksumError("Checksums did not match")
+        # except ChecksumError:
+        #     print("tpr was not set")
 
     def set_power(self, power):
         if(power == 0):
@@ -68,32 +70,32 @@ class Motor:
             resp = self.brook.write(self.cid, 25, [2,abs(power)])
         
         #print(utils.interpret2(resp))
-        print(resp)
+        # print(resp)
 
 
     def read_encoder(self):
         resp = self.brook.write(self.cid, 24,[])
-        print(utils.interpret2(resp))
+        # print(utils.interpret2(resp))
         return utils.interpret2(resp)
 
     def set_pid_angle(self, setpoint):
         data = utils.decTo256(setpoint)
         resp = self.brook.write(self.cid, 26,data)
-        print(utils.interpret2(resp))
+        # print(resp[5],resp[6],resp[7])
+        # print(utils.interpret2(resp))
         #print(resp)
 
     def set_pid_constants(self, Kp, Ki, Kd, Kz):
         data = utils.double_to_data(Kp)
+        print(data)
         data.extend(utils.double_to_data(Ki))
         data.extend(utils.double_to_data(Kd))
         data.append(Kz)
         resp = self.brook.write(self.cid, 29,data)
-        print(resp)
+        # print(resp)
     
     def zero_encoder(self):
-        
         resp = self.brook.write(self.cid, 30, [])
-        #print(resp)
     
     def home(self, direction, speed):
         self.set_power(speed)
@@ -112,13 +114,13 @@ class Motor:
     def read_speed(self):
         resp = self.brook.write(self.cid, 27, [])
         sleep(0.2)
-        print(utils.interpret2(resp))
+        # print(utils.interpret2(resp))
         return utils.interpret2(resp)
 
     def set_pid_speed(self, speed):
         data = utils.decTo256(speed)
         resp = self.brook.write(self.cid, 28, data)
-        print(utils.interpret(resp))
+        # print(utils.interpret(resp))
         self.desired_speed = speed
         if(self.collision):
             self.collision_detect()
@@ -164,8 +166,8 @@ class MotorType:
     rpm435 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
     rpm1150 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
     rpm1620 = {"kP" : 0, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
-    rpm1to20 = {"kP" : 0.21, "kI" : 0, "kD" : 0, "kZ" : 0, "tpr" : 0}
-    
+    rpm1to60 = {"kP" : .097, "kI" : .00, "kD" : 0., "kZ" : 0, "tpr" : 560}
+
 
 class Servo:
     def __init__(self, cid, sid, brook, servo_type): #Servo class now takes servo type as a paramter as well to allow for init servo settings

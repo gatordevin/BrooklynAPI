@@ -14,9 +14,16 @@ def decTo256(num):
     output.append(negitiveCheck(num))
     return output
 
+def decTo256noSign(num):
+    output = []
+    temp = abs(num)
+    output.append(temp%255)
+    output.append(temp//255)
+    return output
+
 def interpret2(packet):
-    encoder_pos = packet[4] + packet[5]*255
-    if(packet[6] == 1):
+    encoder_pos = packet[5] + packet[6]*255
+    if(packet[7] == 1):
         encoder_pos = encoder_pos*-1
     return encoder_pos
 
@@ -31,6 +38,6 @@ def interpret(packet):
 def double_to_data(num):
     num2 = num*1000 
     num3 = int(num2)
-    data = decTo256(num3)
+    data = decTo256noSign(num3)
     return data
 
