@@ -5,7 +5,7 @@ class Empire:
         self.brook = brook
         self.motors = []
         self.servos = []
-        self.cids = [cid+1, cid+2]
+        self.cids = [cid*2, (cid*2)+1]
 
     def motor(self, mid, motor_type=None):
         motor = None
@@ -75,7 +75,7 @@ class Motor:
 
     def read_encoder(self):
         resp = self.brook.write(self.cid, 24,[])
-        # print(utils.interpret2(resp))
+        print(utils.interpret2(resp))
         return utils.interpret2(resp)
 
     def set_pid_angle(self, setpoint):

@@ -2,15 +2,15 @@ import math
 from time import sleep
 class swerve:
 
-    def __init__(self, rotation_motor1, translation_motor1):
+    def __init__(self, rotation_motor1, translation_motor1, rotation_motor2, translation_motor2, rotation_motor3, translation_motor3, rotation_motor4, translation_motor4):
         self.rotation_motor1 = rotation_motor1
         self.translation_motor1 = translation_motor1
-        # self.rotation_motor2 = rotation_motor2
-        # self.translation_motor2 = translation_motor2
-        # self.rotation_motor3 = rotation_motor3
-        # self.translation_motor3 = translation_motor3
-        # self.rotation_motor4 = rotation_motor4
-        # self.translation_motor4 = translation_motor4
+        self.rotation_motor2 = rotation_motor2
+        self.translation_motor2 = translation_motor2
+        self.rotation_motor3 = rotation_motor3
+        self.translation_motor3 = translation_motor3
+        self.rotation_motor4 = rotation_motor4
+        self.translation_motor4 = translation_motor4
     def swerve_speed_calcuator(self, throttleRaw, strafeRaw, rotateRaw):
         wheelSpeeds = [0] * 4
         temp = throttleRaw*math.cos(0) + strafeRaw*math.sin(0)
@@ -75,14 +75,14 @@ class swerve:
         speeds = self.swerve_speed_calcuator(throttleRaw, strafeRaw, rotateRaw)
         # print(speeds[0])
         self.translation_motor1.set_power(speeds[0])
-        # self.translation_motor2.setSpeed(speeds[1])
-        # self.translation_motor3.setSpeed(speeds[2])
-        # self.translation_motor4.setSpeed(speeds[3])
+        self.translation_motor2.set_power(speeds[1])
+        self.translation_motor3.set_power(speeds[2])
+        self.translation_motor4.set_power(speeds[3])
         angles = self.wheel_angle_calculations(throttleRaw, strafeRaw, rotateRaw)
         self.rotation_motor1.set_pid_angle(angles[0])
-        # self.rotation_motor2.set_pid_angle(angles[1])
-        # self.rotation_motor3.set_pid_angle(angles[2])
-        # self.rotation_motor4.set_pid_angle(angles[3])
+        self.rotation_motor2.set_pid_angle(angles[1])
+        self.rotation_motor3.set_pid_angle(angles[2])
+        self.rotation_motor4.set_pid_angle(angles[3])
 
 
 

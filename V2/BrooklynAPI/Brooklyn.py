@@ -72,7 +72,7 @@ class Brooklyn:
 
     def card(self, cid, card_type=None):
         if card_type is None:
-            resp = self.write(cid+1,3,[])
+            resp = self.write(cid*2,3,[])
             card_type = CardType.ids[resp[4]-1]
         card = card_type(self, cid)
         self.cards[cid-1] = card
@@ -115,7 +115,7 @@ class Brooklyn:
         byte_send_packet = bytearray(packet)
         self.ser.write(byte_send_packet)
         self.ser.flush()
-        
+
         resp = list(self.ser.read(5))
         # print(resp)
         resp.extend(list(self.ser.read(resp[4]+4)))
