@@ -81,6 +81,7 @@ class Comms(Serial):
         self.write(bytearray([handshake_byte]))
         resp = ord(self.read(1))
         if(resp==handshake_byte):
+            print("handshaked")
             return True
         else:
             print("Handshake Failed")
@@ -129,8 +130,6 @@ class Comms(Serial):
                 self.flushInput()
                 if(len(data_resp)==resp[5]):
                     if data_type is not None:
-                        print(data_resp)
-                        print(struct.pack('<iI', *[-32345,12345]))
                         data_resp = struct.unpack('<'+data_type, data_resp)
                         return list(resp)+list(data_resp)
                     else:
